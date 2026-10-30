@@ -1,0 +1,10 @@
+.vscode/
+Library.slnx
+appsettings.Development.json
+appsettings.json
+launchSettings.json
+Properties/
+Library.csproj
+.env
+bin/
+obj/
