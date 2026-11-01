@@ -8,3 +8,4 @@ Library.csproj
 .env
 bin/
 obj/
+Logs/

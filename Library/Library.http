@@ -1,6 +1,55 @@
 @Library_HostAddress = http://localhost:5050
+@TestIsbn = 9780306458127
 
-GET {{Library_HostAddress}}/weatherforecast/
+### SearchBook: requires GOOGLE_BOOKS_API_KEY in the app environment.
+GET {{Library_HostAddress}}/api/book/search/harry%20potter?q=harry%20potter
 Accept: application/json
 
-###
+### GetBookByIsbn: expect 404 before adding this test ISBN.
+GET {{Library_HostAddress}}/api/book/{{TestIsbn}}
+Accept: application/json
+
+### addBook: expect 201 Created.
+POST {{Library_HostAddress}}/api/book
+Content-Type: application/json
+
+{
+  "title": "Test Book",
+  "author": "Test Author",
+  "datePublished": "2026-01-01",
+  "isbn": {{TestIsbn}},
+  "rating": 4.5,
+  "priceUSD": 19.99,
+  "pages": 250
+}
+
+### updateBook with mismatched ISBN: expect 400 Bad Request.
+PUT {{Library_HostAddress}}/api/book/{{TestIsbn}}
+Content-Type: application/json
+
+{
+  "title": "Test Book",
+  "author": "Test Author",
+  "datePublished": "2026-01-01",
+  "isbn": 1,
+  "rating": 4.5,
+  "priceUSD": 19.99,
+  "pages": 250
+}
+
+### updateBook with matching ISBN: expect 204 No Content.
+PUT {{Library_HostAddress}}/api/book/{{TestIsbn}}
+Content-Type: application/json
+
+{
+  "title": "Updated Test Book",
+  "author": "Updated Test Author",
+  "datePublished": "2026-01-01",
+  "isbn": {{TestIsbn}},
+  "rating": 4.8,
+  "priceUSD": 24.99,
+  "pages": 300
+}
+
+### deleteBook: expect 204 No Content.
+DELETE {{Library_HostAddress}}/api/book/{{TestIsbn}}
